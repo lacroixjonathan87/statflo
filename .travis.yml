@@ -3,4 +3,6 @@ php:
 - 7.1
 install:
 - composer install
+- cp .env.example .env
+- php artisan key:generate
 script: phpunit
