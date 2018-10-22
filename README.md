@@ -2,7 +2,7 @@
 
 Start dev environment
 ```
-docker-compose up --build (-d)
+docker-compose up --build -d
 cp .env.example .env
 docker-compose exec web php artisan key:generate
 ```
