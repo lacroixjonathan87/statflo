@@ -4,6 +4,8 @@ ENV APACHE_DOCUMENT_ROOT /var/www/statflo/public
 
 WORKDIR /var/www/statflo/
 
+RUN a2enmod rewrite
+
 RUN apt-get update -y && \
     apt-get install -y openssl zip unzip git
 
