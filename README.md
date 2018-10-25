@@ -18,6 +18,7 @@ https://documenter.getpostman.com/view/4390074/RWgxta3N
 ```
 docker-compose exec web vendor/bin/phpunit
 ```
+Use in memory database for speed
 
 ### Connect to the box
 ```
