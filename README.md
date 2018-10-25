@@ -5,6 +5,8 @@
 docker-compose up --build -d
 cp .env.example .env
 docker-compose exec web php artisan key:generate
+touch database/database.sqlite
+docker-compose exec web php artisan migrate
 ```
 
 ### Api documentation

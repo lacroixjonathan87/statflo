@@ -2,81 +2,80 @@
 
 namespace App\Http\Controllers\API;
 
+use App\User;
+use App\Http\Resources\User as UserResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return json_encode([
-        	[
-        		'id' => '977e3f5b-6a70-4862-9ff8-96af4477272a',
-				'name' => 'java beans',
-				'role' => 'foo',
-			]
-		]);
-    }
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index()
+	{
+		$query = User::query();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-		return json_encode([
+		$name = Input::get('name');
+		$query->where('name', 'like', '%' . $name . '%');
+
+		$role = Input::get('role');
+		$query->where('role', 'like', '%' . $role . '%');
+
+		$collection = $query->paginate();
+		return UserResource::collection($collection);
+	}
+
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request)
+	{
+		$validation = Validator::make(
+			$request->all(),
 			[
-				'id' => '977e3f5b-6a70-4862-9ff8-96af4477272a',
-				'name' => 'cookie bars',
-				'role' => 'bar',
+				'name' => 'required|max:100',
+				'role' => 'required|max:100',
 			]
-		]);
-    }
+		);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-		return json_encode([
-			[
-				'id' => $id,
-				'name' => 'java beans',
-				'role' => 'foo',
-			]
-		]);
-    }
+		if($validation->fails()){
+			Log::warning('Input fail validation');
+			return response([
+				'message' => 'Not able to save the user',
+				'errors' => $validation->errors()->all(),
+			], 400);
+		}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+		$model = new User();
+		$model->fill($validation->validate());
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+		if (!$model->save()) {
+			Log::critical('Not able to save to the database');
+			return response(['message' => 'Not able to save the user'], 500);
+		}
+		return new UserResource($model);
+	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show($id)
+	{
+		$model = User::findOrFail($id);
+		return new UserResource($model);
+	}
+
 }
