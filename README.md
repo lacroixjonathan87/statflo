@@ -1,4 +1,6 @@
 # statflo
+Submission to Statflo code challenge: https://github.com/Statflo/challenge-rest-api-java
+
 
 ### Start dev environment
 ```
