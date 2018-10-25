@@ -23,10 +23,14 @@ class UserController extends Controller
 		$query = User::query();
 
 		$name = Input::get('name');
-		$query->where('name', 'like', '%' . $name . '%');
+		if(!is_null($name)){
+			$query->where('name', 'like', '%' . $name . '%');
+		}
 
 		$role = Input::get('role');
-		$query->where('role', 'like', '%' . $role . '%');
+		if(!is_null($role)){
+			$query->where('role', 'like', '%' . $role . '%');
+		}
 
 		$collection = $query->paginate();
 		return UserResource::collection($collection);
