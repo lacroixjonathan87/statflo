@@ -2,7 +2,7 @@ language: php
 php:
 - 7.1
 install:
-- composer install --prefer-dist --no-suggest
+- composer install --prefer-dist --no-interaction --no-suggest --dev
 - cp .env.example .env
 - php artisan key:generate
 script: phpunit
