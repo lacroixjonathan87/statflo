@@ -18,4 +18,4 @@ RUN docker-php-ext-install pdo mbstring pdo_mysql
 
 COPY ./ /var/www/statflo/
 
-RUN composer install
+RUN composer install --no-suggest
