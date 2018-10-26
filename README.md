@@ -2,12 +2,22 @@
 Submission to Statflo code challenge: https://github.com/Statflo/challenge-rest-api-java
 
 
-### Start dev environment
+### Build dev environment
 ```
 docker-compose up -d
 cp .env.example .env
 docker-compose exec web php artisan key:generate
 docker-compose exec web php artisan migrate
+```
+
+### Start dev environment
+```
+docker-compose start
+```
+
+### Stop dev environment
+```
+docker-compose stop
 ```
 
 ### Api documentation
